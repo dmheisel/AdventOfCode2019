@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "test": "jest",
+    "test-verbose": "jest --verbose --colors"
+  },
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "mathjs": "^6.2.5"
+  }
+}
