@@ -27,19 +27,17 @@ test("Pointer starts at 0, moves 1 by default, and can be moved as desired.", ()
 	const computer = new IntcodeComputer();
 	const initialState = computer.pointer;
 	expect(initialState).toBe(0);
-	computer.movePointer();
+	computer.incrementPointer();
 	expect(computer.pointer).toBe(1);
-	computer.movePointer(1000000);
+	computer.incrementPointer(1000000);
 	expect(computer.pointer).toBe(1000001);
 });
 
 test("parseCode returns ADD opcode for 01", () => {
-    const computer = new IntcodeComputer
+    const computer = new IntcodeComputer()
     const data1 = [2, 3, 4, 3]
-    const data2 = [1,4,2,3]
-    const pointer = 0
-    const result1 = computer.parseOpcode(data1, pointer)
-    const result2 = computer.parseOpcode(data2, pointer)
-    expect(result1.name).toBe('02')
-    expect(result2.name).toBe('01')
+	const pointer = 0
+	computer.data = data1
+    const result = computer.parseOpcode()
+    expect(result.name).toBe('02')
 })

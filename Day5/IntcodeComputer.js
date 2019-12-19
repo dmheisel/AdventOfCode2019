@@ -11,7 +11,7 @@ class IntcodeComputer {
 		this._file = fileIn;
 		this._originalData =
 			this._file !== null && this.processInputFile(this._file);
-		this.data = [...this._originalData];
+		this.data = this._originalData && [...this._originalData];
 		this.pointer = 0;
 		this.opcodes = {
 			[ADD]: {
