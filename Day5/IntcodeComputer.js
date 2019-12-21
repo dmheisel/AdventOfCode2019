@@ -1,14 +1,17 @@
 const fs = require("fs");
 const ADD = "01"; // Add
 const MUL = "02"; // Multiply
+const INP = "03"; // Input
+const OUT = "04"; // Output
 const STP = "99"; // Stop/End code
 
-// const POSITION_MODE = "0";
-// const IMMEDIATE_MODE = "1";
+const POS_MODE = "0";
+const IMM_MODE = "1";
 
 class IntcodeComputer {
-	constructor(fileIn = null) {
+	constructor(fileIn = null, inputValue = null) {
 		this._file = fileIn;
+		this.inputValue = inputValue;
 		this._originalData =
 			this._file !== null && this.processInputFile(this._file);
 		this.data = this._originalData && [...this._originalData];
@@ -17,14 +20,24 @@ class IntcodeComputer {
 			[ADD]: {
 				name: ADD,
 				params: 3,
-				fn: (a, b, c) => (this.data[c] = a + b),
+				fn: (a, b, c) => (this.data[c.index] = (a.mode === '0' ? a.value : a.index) + (b.mode === '0' ? b.value : b.index)),
 				write: true
 			},
 			[MUL]: {
 				name: MUL,
 				params: 3,
-				fn: (a, b, c) => (this.data[c] = a * b),
+				fn: (a, b, c) => (this.data[c.index] = (a.mode === '0' ? a.value : a.index) * (b.mode === '0' ? b.value : b.index)),
 				write: true
+			},
+			[INP]: {
+				name: INP,
+				params: 1,
+				fn: (c) => (this.data[c] = this.inputValue)
+			},
+			[OUT]: {
+				name: OUT,
+				params: 1,
+				fn: (c) => console.log(c)
 			},
 			[STP]: {
 				name: STP,
@@ -35,12 +48,13 @@ class IntcodeComputer {
 	}
 
 	parseOpcode() {
-		let code = this.data[this.pointer].toString().padStart(2, "0");
-		let opcode = this.opcodes[code];
-		return opcode;
+		let code = this.data[this.pointer].toString().padStart(5, "0");
+		let opcode = this.opcodes[code.substr(-2)];
+		this.incrementPointer();
+		return {...opcode, code};
 	}
 	run() {
-		this.pointer = 0;
+		this.pointer = 0; // reset pointer back to 0 at start of run program
 		let opcode = this.parseOpcode();
 		while (opcode.name !== STP) {
 			this.runOpcode(opcode);
@@ -50,14 +64,18 @@ class IntcodeComputer {
 		// console.log("Operation complete, new data is: ", this.data);
 	}
 	runOpcode(op) {
-		this.incrementPointer();
-		let values = [];
+		let values = []
 		for (let i = 0; i < op.params; i++) {
-			let changeIndex = this.data[this.pointer + i];
-			op.write && i === op.params - 1
-				? values.push(changeIndex)
-				: values.push(this.data[changeIndex]);
+			let changeIndex = this.data[this.pointer + i]
+			let changeValue = this.data[changeIndex]
+			let parameter = {
+				index: changeIndex,
+				value: changeValue,
+				mode: op.code.substr(0,3).split("").reverse()[i]
+			}
+			values.push(parameter)
 		}
+		console.log(...values)
 		op.fn(...values);
 		this.incrementPointer(op.params);
 		// console.log(`completed opcode ${op.name} on ${values}, pointer moved to ${this.pointer},  data is now: `, this.data, )
@@ -104,5 +122,5 @@ class IntcodeComputer {
 module.exports = IntcodeComputer;
 
 const computer = new IntcodeComputer("Day2/input.txt");
-
-computer.traceInput(19690720);
+console.log(computer.run())
+// computer.traceInput(19690720);
