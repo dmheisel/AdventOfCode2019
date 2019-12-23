@@ -59,7 +59,6 @@ class OrbitMap {
     checkSum(map = this.map) {
         let sum = Object.values(map).reduce((a, b) => a + b.countOrbits(), 0)
         console.log("Sum of total orbits: ", sum)
-        // Object.values(map).forEach(planet => console.log(planet.countOrbits()))
 	}
 	
 	calculateDistance(planet1, planet2) {
