@@ -15,11 +15,13 @@ const IMM_MODE = "1";
 class IntcodeComputer {
 	constructor(fileIn = null, inputValue = null) {
 		this._file = fileIn;
-		this.inputValue = inputValue;
+		this.inputValue = Array.isArray(inputValue) ? inputValue : [inputValue]
 		this._originalData =
 			this._file !== null && this.processInputFile(this._file);
 		this.data = this._originalData && [...this._originalData];
 		this.pointer = 0;
+		this.inputPointer = 0
+		this.output= null
 		this.opcodes = {
 			[ADD]: {
 				name: ADD,
@@ -38,13 +40,18 @@ class IntcodeComputer {
 			[INP]: {
 				name: INP,
 				params: 1,
-				fn: c => (this.data[c.index] = this.inputValue)
+				fn: c => {
+					this.data[c.index] = this.inputValue[this.inputPointer]
+					this.inputPointer ++;
+				}
 			},
 			[OUT]: {
 				name: OUT,
 				params: 1,
-				fn: c =>
-					console.log("output opcode received, output is: ", this.parseMode(c))
+				fn: c => {
+					// console.log("output opcode received, output is: ", this.parseMode(c))
+					this.output = this.parseMode(c)
+				}
 			},
 			[JIT]: {
 				name: JIT,
@@ -179,5 +186,6 @@ class IntcodeComputer {
 module.exports = IntcodeComputer;
 
 const computer = new IntcodeComputer("Day5/input.txt", 5);
-console.log(computer.run());
+computer.run()
+// console.log(computer.output)
 // computer.traceInput(19690720);
