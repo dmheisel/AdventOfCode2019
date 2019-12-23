@@ -71,13 +71,8 @@ class OrbitMap {
 }
 
 const orbitMap = new OrbitMap("Day6/input.txt");
-// console.log(orbitMap.data)
-// console.log(orbitMap.map)
-// console.log(orbitMap.map['L'].countOrbits())
+
 orbitMap.checkSum()
-let list = orbitMap.map["SAN"].listOrbit()
-let sum = orbitMap.map["SAN"].countOrbits()
-// console.log(list)
-// console.log(sum)
+
 let distanceToSanta = orbitMap.calculateDistance("YOU", "SAN")
 console.log(distanceToSanta)
