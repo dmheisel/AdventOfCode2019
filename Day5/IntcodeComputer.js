@@ -13,15 +13,20 @@ const POS_MODE = "0";
 const IMM_MODE = "1";
 
 class IntcodeComputer {
-	constructor(fileIn = null, inputValue = null) {
+	constructor(fileIn = null, inputs = null) {
 		this._file = fileIn;
-		this.inputValue = Array.isArray(inputValue) ? inputValue : [inputValue]
+		this._inputs = Array.isArray(inputs) ? inputs : [inputs]
 		this._originalData =
 			this._file !== null && this.processInputFile(this._file);
 		this.data = this._originalData && [...this._originalData];
+		
 		this.pointer = 0;
-		this.inputPointer = 0
-		this.output= null
+		// this.inputPointer = 0
+		
+		this.output = []
+		
+		this.paused = false;
+
 		this.opcodes = {
 			[ADD]: {
 				name: ADD,
@@ -41,16 +46,16 @@ class IntcodeComputer {
 				name: INP,
 				params: 1,
 				fn: c => {
-					this.data[c.index] = this.inputValue[this.inputPointer]
-					this.inputPointer ++;
-				}
+						this.data[c.index] = this.inputs.shift()		
+				},
+				write: true
 			},
 			[OUT]: {
 				name: OUT,
 				params: 1,
 				fn: c => {
 					// console.log("output opcode received, output is: ", this.parseMode(c))
-					this.output = this.parseMode(c)
+					this.output.push( this.parseMode(c))
 				}
 			},
 			[JIT]: {
@@ -95,8 +100,11 @@ class IntcodeComputer {
 			},
 			[STP]: {
 				name: STP,
-				params: 1,
-				fn: (...a) => console.log("END CODE RCVD", a)
+				params: 0,
+				fn: () => {
+					// console.log("END CODE RCVD");
+					this.paused = true;
+				}
 			}
 		};
 	}
@@ -107,15 +115,20 @@ class IntcodeComputer {
 		this.incrementPointer();
 		return { ...opcode, code };
 	}
+
 	run() {
-		this.pointer = 0; // reset pointer back to 0 at start of run program
+		// this.pointer = 0
 		let opcode = this.parseOpcode();
-		while (opcode.name !== STP) {
+		while (!this.paused) {
+			// console.log('opcode being run: ', opcode)
 			this.runOpcode(opcode);
+			if (opcode.name === OUT || this.paused === true) {
+				// console.log("pausing run")
+				break;
+			}
 			opcode = this.parseOpcode();
 		}
-		return this.data;
-		// console.log("Operation complete, new data is: ", this.data);
+		return this.output;
 	}
 	runOpcode(op) {
 		let values = [];
@@ -174,8 +187,14 @@ class IntcodeComputer {
 	set file(newFile) {
 		this._file = newFile;
 	}
+	get inputs() {
+		return this._inputs
+	}
+	set inputs(newinputs) {
+		this._inputs = newinputs
+	}
 	resetData() {
-		this.data = this._originalData;
+		this.data = this._originalData.slice();
 	}
 	processInputFile(file) {
 		let data = fs.readFileSync(file, "utf8");
@@ -185,7 +204,7 @@ class IntcodeComputer {
 
 module.exports = IntcodeComputer;
 
-const computer = new IntcodeComputer("Day5/input.txt", 5);
-computer.run()
+// const computer = new IntcodeComputer("Day5/input.txt", 5);
+// computer.run()
 // console.log(computer.output)
 // computer.traceInput(19690720);

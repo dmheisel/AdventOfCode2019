@@ -7,6 +7,7 @@
     "jest": "^24.9.0"
   },
   "dependencies": {
+    "js-combinatorics": "^0.5.5",
     "lodash": "^4.17.15",
     "mathjs": "^6.2.5"
   }
