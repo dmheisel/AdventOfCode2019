@@ -204,7 +204,7 @@ class IntcodeComputer {
 
 module.exports = IntcodeComputer;
 
-// const computer = new IntcodeComputer("Day5/input.txt", 5);
-// computer.run()
-// console.log(computer.output)
+const computer = new IntcodeComputer("Day5/input.txt", 5);
+computer.run()
+console.log(computer.output)
 // computer.traceInput(19690720);

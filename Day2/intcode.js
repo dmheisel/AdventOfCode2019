@@ -83,5 +83,5 @@ module.exports = Intcode;
 const data = fs.readFileSync('Day2/input.txt', { encoding: 'utf8' });
 const computer = new Intcode(data);
 
-console.log(computer.report())
+// console.log(computer.report())
 // console.log(computer.findInputs(19690720))

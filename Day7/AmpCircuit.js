@@ -1,24 +1,26 @@
-const IntcodeComputer = require("../Day5/IntcodeComputer");
+const IntcodeComputer = require("../Day9/Intcode");
 const C = require("js-combinatorics");
 
 class AmpCircuit {
 	constructor(file, numOfAmps = 5, feedbackMode = false) {
 		this.file = file;
 		this.numOfAmps = numOfAmps;
+		this.feedbackMode = feedbackMode
         this.amps = [];
 		for (let i = 0; i < numOfAmps; i++) {
-			let amp = new IntcodeComputer(this.file);
+			let amp = new IntcodeComputer(this.file, null, this.feedbackMode);
             this.amps.push(amp);
 		}
 		this.currentAmp = 0;
 	}
 
 	runCircuit(settings) {
+		this.amps.forEach(amp => this.recalibrateAmp(amp))
 		let output = 0;
 		this.amps.forEach((amp, index) => {
 			amp.inputs = [settings[index], output];
-			amp.run();
-			output = Number(amp.output.shift());
+			output = amp.run().shift();
+			// console.log(output)
 
 		});
 		return output;
@@ -29,7 +31,6 @@ class AmpCircuit {
         amp.paused = false
     }
     runFeedbackCircuit(settings) {
-        // console.log(settings)
         settings.forEach((setting, index) => {
             this.recalibrateAmp(this.amps[index])
             this.amps[index].inputs = [setting]
@@ -43,7 +44,7 @@ class AmpCircuit {
 
         while (!amp.paused) {
             let newOutput = amp.run();
-			if (amp.paused) {
+			if (this.feedbackMode && amp.paused) {
 				break;
 			}
             output = newOutput;
@@ -89,10 +90,16 @@ class AmpCircuit {
 		return optimalSettings;
 	}
 }
+const circuit = new AmpCircuit("Day7/input.txt", 5)
+let settings = circuit.calcOptimalPhase()
+console.log("Non-Feedback Settings: ", settings)
+let output = circuit.runCircuit(settings)
+console.log("Non-Feedback Output: ", output)
 
-const circuit = new AmpCircuit("Day7/input.txt", 5, true);
 
-let feedbackSettings = circuit.calcFeedbackPhaseSettings();
+const feedbackCircuit = new AmpCircuit("Day7/input.txt", 5, true);
 
-let output = circuit.runFeedbackCircuit(feedbackSettings)
-console.log(output)
+let feedbackSettings = feedbackCircuit.calcFeedbackPhaseSettings();
+
+let feedbackOutput = feedbackCircuit.runFeedbackCircuit(feedbackSettings)
+console.log("Feedback Output: ", feedbackOutput)
