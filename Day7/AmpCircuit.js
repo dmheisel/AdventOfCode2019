@@ -91,13 +91,8 @@ class AmpCircuit {
 }
 
 const circuit = new AmpCircuit("Day7/input.txt", 5, true);
-// const output = circuit.runCircuit([4,3,2,1,0]);
-// console.log(output)
-// let settings = circuit.calcOptimalPhase();
-// console.log(settings)
-// let output  = circuit.runCircuit(settings)
-// console.log(output)
+
 let feedbackSettings = circuit.calcFeedbackPhaseSettings();
-// console.log(feedbackSettings);
+
 let output = circuit.runFeedbackCircuit(feedbackSettings)
 console.log(output)
