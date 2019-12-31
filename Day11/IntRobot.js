@@ -103,5 +103,4 @@ class Robot {
 const robot = new Robot();
 
 robot.run()
-// console.log(Object.keys(robot.history).length)
 robot.printGrid()
