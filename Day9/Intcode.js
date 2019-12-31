@@ -160,12 +160,12 @@ class Intcode {
 		while (!this.paused) {
 			this.runOpcode(opcode);
 			if ((this.canPause && opcode.name === OUT) || this.paused === true) {
-				console.log("pausing run on opcode: ", opcode)
+				// console.log("pausing run on opcode: ", opcode)
 					break;
 			}			
 			opcode = this.parseOpcode();
 		}
-		console.log("Run command complete - output is: ", this.output)
+		// console.log("Run command complete - output is: ", this.output.length > 1 ? this.output : this.output[0])
 		return this.output;
 	}
 	runOpcode(op) {
@@ -236,6 +236,6 @@ class Intcode {
 
 module.exports = Intcode;
 
-const computer = new Intcode("Day9/input.txt", 2);
-computer.run()
+// const computer = new Intcode("Day9/input.txt", 2);
+// computer.run()
 
