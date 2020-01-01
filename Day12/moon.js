@@ -1,3 +1,4 @@
+let vectors = ["x", "y", "z"]
 class Moon {
 	constructor(name, position = null, velocity = null) {
 		this._name = name;
@@ -6,24 +7,22 @@ class Moon {
 	}
 	//apply the moons velocity to update its current position - done on each time tick in system.
 	applyVelocity() {
-		this.position.x += this.velocity.x;
-		this.position.y += this.velocity.y;
-		this.position.z += this.velocity.z;
+		vectors.forEach(vector => {
+			this.position[vector] += this.velocity[vector]
+		}) 
 	}
 	//updates velocity with new values -- given from gravity calculations.
 	updateVelocity(newVelocity) {
-		this.velocity.x += newVelocity.x;
-		this.velocity.y += newVelocity.y;
-		this.velocity.z += newVelocity.z;
+		vectors.forEach(vector => 
+			this.velocity[vector] += newVelocity[vector]
+		)
 	}
 	//energy calculations - could combine into one? left separate in case pot or kin energy is every needed
 	calculatePotentialEnergy() {
-		const position = this.position;
-		return Math.abs(position.x) + Math.abs(position.y) + Math.abs(position.z);
+		return Object.values(this.position).reduce((a, b) => Math.abs(a) + Math.abs(b), 0)
 	}
 	calculateKineticEnergy() {
-		const velocity = this.velocity;
-		return Math.abs(velocity.x) + Math.abs(velocity.y) + Math.abs(velocity.z);
+		return Object.values(this.velocity).reduce((a, b) => Math.abs(a) + Math.abs(b), 0)
 	}
 	calculateTotalEnergy() {
 		return this.calculatePotentialEnergy() * this.calculateKineticEnergy();
