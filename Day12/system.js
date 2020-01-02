@@ -94,5 +94,5 @@ class System {
 
 module.exports = System;
 
-const jupiter = new System(input);
-jupiter.findPeriod()
+// const jupiter = new System(input);
+// jupiter.findPeriod()

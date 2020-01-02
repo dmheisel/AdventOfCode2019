@@ -7,7 +7,7 @@ class Moon {
 		this._position = position || { x: 0, y: 0, z: 0 };
 		this._initialPosition = {};
 		vectors.forEach(vector => {
-			this._initialPosition[vector] = position[vector] || 0
+			this._initialPosition[vector] = this.position[vector] || 0
 		})
 		this._velocity = velocity || { x: 0, y: 0, z: 0 };
 	}
