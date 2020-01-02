@@ -11,22 +11,26 @@ test("Intcode class method for processing file returns data as array", () => {
 	expect(computer instanceof Intcode).toBe(true);
 	expect(Array.isArray(computer.data)).toBe(true);
 });
-test("intcode returns output of opcode 2 properly", () => {
-    let data = "2,3,0,3,99";
-    let intcode = new Intcode()
-    intcode.data = data;
-    let opcode = intcode.parseOpcode()
-    expect(opcode.name).toBe("02")
-})
 
-// test("intcode returns output of opcode 2 properly", () => {
-//     let data = "2,3,0,3,99";
-//     let intcode = new Intcode()
-//     intcode.data = data;
-//     intcode.run()
-//     let opcode = intcode.parseOpcode()
-//     expect(opcode.name).toBe("02")
-// })
+
+describe("opcode testing - opcode functions work as expected", () => {
+	let intcode = new Intcode()
+	test("parseCode returns ADD opcode for 01", () => {
+		const data1 = [1, 3, 4, 3, 99]
+		intcode.data = data1
+		console.log(intcode.pointer)
+		const result = intcode.parseOpcode()
+		expect(result.name).toBe('01')
+	})
+	test("intcode returns output of opcode 2 properly", () => {
+		let data = "2,3,0,3,99";
+		intcode.pointer = 0
+		intcode.data = data;
+		let opcode = intcode.parseOpcode()
+		expect(opcode.name).toBe("02")
+	})
+	
+})
 
 test("Intcode set data and reset data methods properly set data and re-set to original", () => {
 	const computer = new Intcode("Day2/input.txt");
@@ -49,11 +53,4 @@ test("Pointer starts at 0, moves 1 by default, and can be moved as desired.", ()
 	expect(computer.pointer).toBe(1000001);
 });
 
-test("parseCode returns ADD opcode for 01", () => {
-    const computer = new Intcode()
-    const data1 = [2, 3, 4, 3]
-	const pointer = 0
-	computer.data = data1
-    const result = computer.parseOpcode()
-    expect(result.name).toBe('02')
-})
+

@@ -32,8 +32,8 @@ class System {
             period = this.checkPeriod()
             // this.currentTime++
         }
-        period *= 2
-        console.log(`Period found at ${period}`)
+		period *= 2
+		return period
     }
     
 	//calculation /update methods
@@ -63,13 +63,10 @@ class System {
         for (let vector of vectors) {
             if (this.axisPeriods[vector] === null && Object.values(this.moons).every(moon => moon.velocity[vector] === 0)) { 
                 let period = this.currentTime
-                console.log(`${vector} period found at: ${period}`)
                 this.axisPeriods[vector] = period
             }
         }
-        if (Object.values(this.axisPeriods).every(val => val !== null)) {
-            console.log(Object.values(this.axisPeriods))
-            
+        if (Object.values(this.axisPeriods).every(val => val !== null)) {            
             systemPeriod = mathJs.lcm(...Object.values(this.axisPeriods))
         }
         return systemPeriod
