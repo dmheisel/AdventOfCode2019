@@ -18,7 +18,6 @@ describe("opcode testing - opcode functions work as expected", () => {
 	test("parseCode returns ADD opcode for 01", () => {
 		const data1 = [1, 3, 4, 3, 99]
 		intcode.data = data1
-		console.log(intcode.pointer)
 		const result = intcode.parseOpcode()
 		expect(result.name).toBe('01')
 	})
