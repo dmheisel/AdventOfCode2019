@@ -46,7 +46,6 @@ describe("Time Step functionality for System class", () => {
 	test("TimeStep function increases system time by 1", () => {
 		expect(jupiter.currentTime).toBe(1);
     });
-    
 	test("Correctly determines velocity changes", () => {
 		expect(jupiter.moons.Io.velocity).toEqual({ x: 3, y: -1, z: -1 });
 		expect(jupiter.moons.Ganymede.velocity).toEqual({ x: -3, y: 1, z: -3 });
@@ -67,8 +66,8 @@ describe("Time Step functionality for System class", () => {
         expect(jupiter.moons.Ganymede.velocity).toEqual({ x: 3, y: 2, z: -3 })
     })
     test("Simulate function correctly steps time for the number provided", () => {
-        jupiter.simulate(1000);
-        expect(jupiter.currentTime).toBe(1010)
+        jupiter.simulate(4);
+        expect(jupiter.currentTime).toBe(14)
     })
 });
 describe("System Energy Calculations", () => {

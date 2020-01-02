@@ -12,6 +12,12 @@ test("Moon apply velocity increases position by adding values in its velocity to
 	io.applyVelocity();
 	expect(io.position).toEqual({ x: 1, y: 2, z: -1 });
 });
+test("Moon apply velocity does NOT change the intitial position values", () => {
+    const io = new Moon("Io", null, { x: 1, y: 2, z: -1 });
+	io.applyVelocity();
+    expect(io.position).toEqual({ x: 1, y: 2, z: -1 });
+    expect(io.initialPosition).toEqual({x: 0, y: 0, z: 0})
+})
 
 test("Moon update velocity function updates velocity by adding provided values", () => {
 	const io = new Moon("Io", null, { x: 1, y: -1, z: 10 });
