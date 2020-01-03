@@ -17,10 +17,10 @@ const REL_MODE = "2"; // Relative Mode -- use value at relative base
 class Intcode {
 	constructor(fileIn = null, inputs = null, infeedbackMode = false) {
 		this._file = fileIn;
-		this._inputs = Array.isArray(inputs) ? inputs : [inputs];
+		this._inputs = inputs === null ? [] : Array.isArray(inputs) ? inputs : [inputs]
 		this._originalData =
 			this._file !== null && this.processInputFile(this._file);
-		this.data = this._originalData && [...this._originalData];
+		this.data = this._originalData && this._originalData.slice(0);
 
 		this.pointer = 0;
 		this.relativeBase = 0;
@@ -110,7 +110,9 @@ class Intcode {
 			}
 		};
 	}
-
+	addInput(num) {
+		this.inputs.push(num);
+	}
 	parseOpcode() {
 		let code = this.data[this.pointer].toString().padStart(5, "0");
 		let opcode = this.opcodes[code.substr(-2)];
@@ -168,8 +170,10 @@ class Intcode {
 		// console.log("Run command complete - output is: ", this.output.length > 1 ? this.output : this.output[0])
 		return this.output;
 	}
-	runOpcode(op) {
-		let values = this.parseParameters(op);
+	runOpcode(op, values = null) {
+		if (values === null) {
+			values = this.parseParameters(op);
+		}  
 		let result = op.fn(...values);
 		if (!op.jumper || (op.jumper && !result)) {
 			this.incrementPointer(op.params);
@@ -237,5 +241,7 @@ class Intcode {
 module.exports = Intcode;
 
 // const computer = new Intcode("Day9/input.txt", 2);
-// computer.run()
+// let output = computer.run()
+// console.log(output)
+// console.log(computer.output)
 
